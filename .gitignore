@@ -34,7 +34,6 @@ DerivedData/
 timeline.xctimeline
 playground.xcworkspace
 
-
 .build/
 
 # CocoaPods
