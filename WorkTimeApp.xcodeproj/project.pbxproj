@@ -12,6 +12,7 @@
 		773BC7ED29C2D8FA00CEC5D7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 773BC7EC29C2D8FA00CEC5D7 /* ViewController.swift */; };
 		773BC7F229C2D8FC00CEC5D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 773BC7F129C2D8FC00CEC5D7 /* Assets.xcassets */; };
 		773BC7F529C2D8FC00CEC5D7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 773BC7F329C2D8FC00CEC5D7 /* LaunchScreen.storyboard */; };
+		774CCC8B29CAD3F80053A234 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774CCC8A29CAD3F80053A234 /* R.generated.swift */; };
 		84C911EC7CD6015A4D904979 /* Pods_WorkTimeApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 712BB4695ACD6E13D500A084 /* Pods_WorkTimeApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -24,6 +25,7 @@
 		773BC7F129C2D8FC00CEC5D7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		773BC7F429C2D8FC00CEC5D7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		773BC7F629C2D8FC00CEC5D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		774CCC8A29CAD3F80053A234 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
 		8BDD676F41D8272DABAA0355 /* Pods-WorkTimeApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WorkTimeApp.release.xcconfig"; path = "Target Support Files/Pods-WorkTimeApp/Pods-WorkTimeApp.release.xcconfig"; sourceTree = "<group>"; };
 		9751FB7BC88AC3A20B28D573 /* Pods-WorkTimeApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WorkTimeApp.debug.xcconfig"; path = "Target Support Files/Pods-WorkTimeApp/Pods-WorkTimeApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -69,6 +71,7 @@
 		773BC7E729C2D8FA00CEC5D7 /* WorkTimeApp */ = {
 			isa = PBXGroup;
 			children = (
+				774CCC5E29CACF9E0053A234 /* Resources */,
 				773BC7FD29C2D99300CEC5D7 /* Application */,
 				773BC7FC29C2D97E00CEC5D7 /* SupportingFiles */,
 				773BC7EC29C2D8FA00CEC5D7 /* ViewController.swift */,
@@ -95,13 +98,28 @@
 			path = Application;
 			sourceTree = "<group>";
 		};
+		774CCC5E29CACF9E0053A234 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				774CCC5F29CAD0550053A234 /* Generated */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		774CCC5F29CAD0550053A234 /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				774CCC8A29CAD3F80053A234 /* R.generated.swift */,
+			);
+			path = Generated;
+			sourceTree = "<group>";
+		};
 		84DAFCAD480B624C7958B601 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
 				9751FB7BC88AC3A20B28D573 /* Pods-WorkTimeApp.debug.xcconfig */,
 				8BDD676F41D8272DABAA0355 /* Pods-WorkTimeApp.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -117,6 +135,7 @@
 				773BC7E229C2D8FA00CEC5D7 /* Frameworks */,
 				773BC7E329C2D8FA00CEC5D7 /* Resources */,
 				3EE7F1D211612D63BD02CBBB /* [CP] Embed Pods Frameworks */,
+				774CCC5D29CACF700053A234 /* R Generate */,
 			);
 			buildRules = (
 			);
@@ -190,6 +209,25 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WorkTimeApp/Pods-WorkTimeApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		774CCC5D29CACF700053A234 /* R Generate */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "R Generate";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/WorkTimeApp/Resources/Generated/R.generated.swift\"\n";
+		};
 		8D39CE9CBB7EB4E784E47A93 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -222,6 +260,7 @@
 				773BC7ED29C2D8FA00CEC5D7 /* ViewController.swift in Sources */,
 				773BC7E929C2D8FA00CEC5D7 /* AppDelegate.swift in Sources */,
 				773BC7EB29C2D8FA00CEC5D7 /* SceneDelegate.swift in Sources */,
+				774CCC8B29CAD3F80053A234 /* R.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
