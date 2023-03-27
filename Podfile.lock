@@ -1,12 +1,18 @@
 PODS:
+  - AuthSDK (0.1.0):
+    - R.swift
   - R.swift (7.2.4)
   - SnapKit (5.6.0)
   - SwiftLint (0.50.3)
+  - UIComponents (0.1.0):
+    - SnapKit
 
 DEPENDENCIES:
-  - R.swift
+  - AuthSDK (from `./Frameworks/AuthSDK`)
+  - R.swift (~> 7)
   - SnapKit (~> 5)
-  - SwiftLint
+  - SwiftLint (~> 0)
+  - UIComponents (from `./Frameworks/UIComponents`)
 
 SPEC REPOS:
   trunk:
@@ -14,11 +20,19 @@ SPEC REPOS:
     - SnapKit
     - SwiftLint
 
+EXTERNAL SOURCES:
+  AuthSDK:
+    :path: "./Frameworks/AuthSDK"
+  UIComponents:
+    :path: "./Frameworks/UIComponents"
+
 SPEC CHECKSUMS:
+  AuthSDK: 6a5f1156e85c672ec597f24e808b14e7e4796aa7
   R.swift: 681bb9135f482e7a81d9d27445b837fef5467e11
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   SwiftLint: 77f7cb2b9bb81ab4a12fcc86448ba3f11afa50c6
+  UIComponents: ec2b52ae0774aee13944db2db98e15f3388fba42
 
-PODFILE CHECKSUM: 152122f28bbdcc8d1d827ebda31d0b080de07868
+PODFILE CHECKSUM: a8e0192ac770e51b51556ab326cc49c72ac404d0
 
 COCOAPODS: 1.12.0
