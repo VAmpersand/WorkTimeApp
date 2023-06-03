@@ -12,15 +12,22 @@ extension WTTitleSwitchView {
     public enum ActivityState {
         case left
         case right
+
+        mutating func toggle() {
+            self = self == .left ? .right : .left
+        }
     }
 }
 
 open class WTTitleSwitchView: BaseView {
-    private let leftButton = UIButton()
-    private let buttonSeparatorView = UILabel()
-    private let rightButton = UIButton()
+    private let firstLabel = UILabel()
+    private let separatorView = UILabel()
+    private let secondLabel = UILabel()
+    private let button = UIButton()
 
-    private let animatiomTimeInterval: TimeInterval = 0.3
+    private let animationTimeInterval: TimeInterval = 0.3
+    private var animationPoint: CGFloat = 0
+    private var animationTimer = Timer()
 
     public var state = ActivityState.left {
         didSet {
@@ -28,109 +35,136 @@ open class WTTitleSwitchView: BaseView {
         }
     }
 
-    public var titles: (leftTitle: String, rightTitle: String)? = nil {
+    public var titles: (firstTitle: String, secondTitle: String)? = nil {
         didSet {
-            leftButton.setTitle(titles?.leftTitle, for: .normal)
-            rightButton.setTitle(titles?.rightTitle, for: .normal)
+            firstLabel.text = titles?.firstTitle
+            secondLabel.text = titles?.secondTitle
         }
     }
 
     override func setup() {
         super.setup()
 
-        setupLeftButton()
-        setupButtonSeparatorView()
-        setupRightButton()
+        setupSeparatorView()
+        setupFirstLabel()
+        setupSecondLabel()
+        setupButton()
     }
 }
 
 // MARK: - Setup UI
 private extension WTTitleSwitchView {
-    func setupLeftButton() {
-        addSubview(leftButton)
+    func setupSeparatorView() {
+        addSubview(separatorView)
 
-        leftButton.setTitleColor(.black, for: .normal)
-        leftButton.addTarget(self, action: #selector(leftButtonHandler), for: .touchUpInside)
+        separatorView.text = "/"
+        separatorView.font = .systemFont(ofSize: 30, weight: .medium)
 
-        leftButton.snp.makeConstraints {
-            $0.verticalEdges.equalToSuperview()
-            $0.leading.equalToSuperview()
+        separatorView.snp.makeConstraints {
+            $0.bottom.equalToSuperview()
         }
     }
 
-    func setupButtonSeparatorView() {
-        addSubview(buttonSeparatorView)
+    func setupFirstLabel() {
+        addSubview(firstLabel)
 
-        buttonSeparatorView.text = "/"
+        firstLabel.font = .systemFont(ofSize: 30, weight: .medium)
+        firstLabel.layoutMargins.bottom = 0
 
-        buttonSeparatorView.snp.makeConstraints {
-            $0.centerY.equalTo(leftButton)
-            $0.leading.equalTo(leftButton.snp.trailing).offset(5)
+        firstLabel.snp.makeConstraints {
+            $0.bottom.leading.equalToSuperview()
+            $0.trailing.equalTo(separatorView.snp.leading).offset(-10)
         }
     }
 
-    func setupRightButton() {
-        addSubview(rightButton)
+    func setupSecondLabel() {
+        addSubview(secondLabel)
 
-        rightButton.setTitleColor(.black, for: .normal)
-        rightButton.addTarget(self, action: #selector(rightButtonHandler), for: .touchUpInside)
-        rightButton.alpha = 0.3
+        secondLabel.font = .systemFont(ofSize: 20, weight: .regular)
+        secondLabel.layoutMargins.bottom = 0
+        secondLabel.alpha = 0.3
 
-        rightButton.snp.makeConstraints {
-            $0.leading.equalTo(buttonSeparatorView.snp.trailing).offset(5)
-            $0.trailing.verticalEdges.equalToSuperview()
+        secondLabel.snp.makeConstraints {
+            $0.leading.equalTo(separatorView.snp.trailing).offset(10)
+            $0.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(2.5)
         }
     }
+
+    func setupButton() {
+        addSubview(button)
+
+        button.addTarget(self, action: #selector(buttonHandler), for: .touchUpInside)
+
+        button.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+    }
+
 }
 
 public extension WTTitleSwitchView {
-    @IBAction func leftButtonHandler() {
-        if state == .right {
-            state = .left
-            print("leftButtonHandler")
-        }
-    }
-
-    @IBAction func rightButtonHandler() {
-        if state == .left {
-            state = .right
-            print("rightButtonHandler")
-        }
+    @IBAction func buttonHandler() {
+        state.toggle()
     }
 }
 
 private extension WTTitleSwitchView {
     func animateStateSetting() {
-        let activeButton = state == .left ? rightButton : leftButton
-        let inactiveButton = state == .left ? leftButton : rightButton
+        let activeLable = state == .left ? secondLabel : firstLabel
+        let inactiveLable = state == .left ? firstLabel : secondLabel
 
-        UIView.animate(withDuration: animatiomTimeInterval / 2) { // Reset alpha
-            activeButton.alpha = 0.3
-            self.buttonSeparatorView.alpha = 0.3
-
+        // MARK: - Separator animation
+        UIView.animate(withDuration: animationTimeInterval / 4) {
+            self.separatorView.alpha = 0.1
         } completion: { _ in
-            UIView.animate(withDuration: self.animatiomTimeInterval) { // Set position
-                inactiveButton.snp.remakeConstraints {
-                    $0.leading.verticalEdges.equalToSuperview()
-                }
-
-                self.buttonSeparatorView.snp.remakeConstraints {
-                    $0.centerY.equalTo(inactiveButton)
-                    $0.leading.equalTo(inactiveButton.snp.trailing).offset(5)
-                }
-
-                activeButton.snp.remakeConstraints {
-                    $0.leading.equalTo(self.buttonSeparatorView.snp.trailing).offset(5)
-                    $0.verticalEdges.trailing.equalToSuperview()
-                }
-                self.layoutIfNeeded()
-
-            } completion: { _ in
-                UIView.animate(withDuration: self.animatiomTimeInterval / 2) { // Set alpha
-                    self.buttonSeparatorView.alpha = 1
-                    inactiveButton.alpha = 1
-                }
+            UIView.animate(withDuration: self.animationTimeInterval / 4,
+                           delay: self.animationTimeInterval / 2) {
+                self.separatorView.alpha = 1
             }
         }
+
+        // MARK: - Lable transition animation
+        UIView.animate(withDuration: animationTimeInterval) {
+            activeLable.alpha = 0.3
+            inactiveLable.alpha = 1
+
+            inactiveLable.snp.remakeConstraints {
+                $0.leading.bottom.equalToSuperview()
+                $0.trailing.equalTo(self.separatorView.snp.leading).offset(-10)
+            }
+
+            activeLable.snp.remakeConstraints {
+                $0.trailing.equalToSuperview()
+                $0.leading.equalTo(self.separatorView.snp.trailing).offset(10)
+                $0.bottom.equalToSuperview().inset(2.5)
+            }
+
+            self.layoutIfNeeded()
+        }
+
+        // MARK: - Lable transformation animation
+        animationTimer.invalidate()
+        animationTimer = Timer.scheduledTimer(withTimeInterval: animationTimeInterval / 25,
+                                              repeats: true,
+                                              block: { timer in
+            if self.animationPoint < 10 {
+                self.animationPoint += 0.4
+
+                let inactiveSize = 20 + self.animationPoint
+                inactiveLable.font = inactiveSize > 25
+                    ? .systemFont(ofSize: inactiveSize, weight: .medium)
+                    : .systemFont(ofSize: inactiveSize, weight: .regular)
+
+                let activeSize = 30 - self.animationPoint
+                activeLable.font = activeSize < 25
+                    ? .systemFont(ofSize: activeSize, weight: .regular)
+                    : .systemFont(ofSize: activeSize, weight: .medium)
+
+            } else {
+                timer.invalidate()
+                self.animationPoint = 0
+            }
+        })
     }
 }
