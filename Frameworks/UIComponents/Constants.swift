@@ -8,3 +8,6 @@
 import Foundation
 
 public struct Constants {}
+
+public typealias WTFont = R.font
+public typealias WTColor = R.color

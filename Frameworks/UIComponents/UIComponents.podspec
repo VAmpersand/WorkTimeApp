@@ -17,6 +17,15 @@ Pod::Spec.new do |s|
     "Resources/**/*.{strings,stringsdict}"
   ]
 
+  s.dependency 'R.swift'
   s.dependency 'SnapKit'
+
+  s.script_phase = {
+    :name => 'Generate R',
+    :script => '"$PODS_ROOT/R.swift/rswift" generate --accessLevel public "$PODS_TARGET_SRCROOT/Resources/Generated/R.generated.swift"',
+    :input_files => [ '$TEMP_DIR/rswift-lastrun' ],
+    :output_files => [ '$PODS_TARGET_SRCROOT/Resources/Generated/R.generated.swift' ],
+    :execution_position => :before_compile
+  }
 
 end

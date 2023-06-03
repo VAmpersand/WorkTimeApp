@@ -1,5 +1,5 @@
 //
-//  WTTitleSwitchView.swift
+//  WTValueSwitchView.swift
 //  UIComponents
 //
 //  Created by Viktor Prikolota on 02.04.2023.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-extension WTTitleSwitchView {
+extension WTValueSwitchView {
     public enum ActivityState {
         case left
         case right
@@ -19,13 +19,13 @@ extension WTTitleSwitchView {
     }
 }
 
-open class WTTitleSwitchView: BaseView {
+open class WTValueSwitchView: BaseView {
     private let firstLabel = UILabel()
     private let separatorView = UILabel()
     private let secondLabel = UILabel()
     private let button = UIButton()
 
-    private let animationTimeInterval: TimeInterval = 0.3
+    private let animationTimeInterval: TimeInterval = 0.4
     private var animationPoint: CGFloat = 0
     private var animationTimer = Timer()
 
@@ -45,6 +45,8 @@ open class WTTitleSwitchView: BaseView {
     override func setup() {
         super.setup()
 
+        UIFont.registerFonts(from: Bundle.uiComponents)
+
         setupSeparatorView()
         setupFirstLabel()
         setupSecondLabel()
@@ -53,12 +55,13 @@ open class WTTitleSwitchView: BaseView {
 }
 
 // MARK: - Setup UI
-private extension WTTitleSwitchView {
+private extension WTValueSwitchView {
     func setupSeparatorView() {
         addSubview(separatorView)
 
         separatorView.text = "/"
-        separatorView.font = .systemFont(ofSize: 30, weight: .medium)
+        separatorView.font = WTFont.robotoMedium(size: 30)
+        separatorView.textColor = WTColor.titla_active()
 
         separatorView.snp.makeConstraints {
             $0.bottom.equalToSuperview()
@@ -68,8 +71,9 @@ private extension WTTitleSwitchView {
     func setupFirstLabel() {
         addSubview(firstLabel)
 
-        firstLabel.font = .systemFont(ofSize: 30, weight: .medium)
         firstLabel.layoutMargins.bottom = 0
+        firstLabel.font = WTFont.robotoMedium(size: 30)
+        firstLabel.textColor = WTColor.titla_active()
 
         firstLabel.snp.makeConstraints {
             $0.bottom.leading.equalToSuperview()
@@ -80,9 +84,9 @@ private extension WTTitleSwitchView {
     func setupSecondLabel() {
         addSubview(secondLabel)
 
-        secondLabel.font = .systemFont(ofSize: 20, weight: .regular)
+        secondLabel.font = WTFont.robotoRegular(size: 20)
         secondLabel.layoutMargins.bottom = 0
-        secondLabel.alpha = 0.3
+        secondLabel.textColor = WTColor.titla_inactive()
 
         secondLabel.snp.makeConstraints {
             $0.leading.equalTo(separatorView.snp.trailing).offset(10)
@@ -100,16 +104,15 @@ private extension WTTitleSwitchView {
             $0.edges.equalToSuperview()
         }
     }
-
 }
 
-public extension WTTitleSwitchView {
+public extension WTValueSwitchView {
     @IBAction func buttonHandler() {
         state.toggle()
     }
 }
 
-private extension WTTitleSwitchView {
+private extension WTValueSwitchView {
     func animateStateSetting() {
         let activeLable = state == .left ? secondLabel : firstLabel
         let inactiveLable = state == .left ? firstLabel : secondLabel
@@ -126,8 +129,8 @@ private extension WTTitleSwitchView {
 
         // MARK: - Lable transition animation
         UIView.animate(withDuration: animationTimeInterval) {
-            activeLable.alpha = 0.3
-            inactiveLable.alpha = 1
+            activeLable.textColor = WTColor.titla_inactive()
+            inactiveLable.textColor = WTColor.titla_active()
 
             inactiveLable.snp.remakeConstraints {
                 $0.leading.bottom.equalToSuperview()
@@ -153,13 +156,13 @@ private extension WTTitleSwitchView {
 
                 let inactiveSize = 20 + self.animationPoint
                 inactiveLable.font = inactiveSize > 25
-                    ? .systemFont(ofSize: inactiveSize, weight: .medium)
-                    : .systemFont(ofSize: inactiveSize, weight: .regular)
+                    ? WTFont.robotoMedium(size: inactiveSize)
+                    : WTFont.robotoRegular(size: inactiveSize)
 
                 let activeSize = 30 - self.animationPoint
                 activeLable.font = activeSize < 25
-                    ? .systemFont(ofSize: activeSize, weight: .regular)
-                    : .systemFont(ofSize: activeSize, weight: .medium)
+                    ? WTFont.robotoRegular(size: activeSize)
+                    : WTFont.robotoMedium(size: activeSize)
 
             } else {
                 timer.invalidate()

@@ -12,7 +12,7 @@ import UIComponents
 public final class AuthViewController: BaseViewController {
 
     private let contentView = UIView()
-    private let titleSwitchView = WTTitleSwitchView()
+    private let titleSwitchView = WTValueSwitchView()
     private let usernameTextField = WTAuthTextField()
     private let passwordTestField = WTAuthTextField()
     private let loginButton = UIButton()
@@ -20,7 +20,7 @@ public final class AuthViewController: BaseViewController {
     override public func setup() {
         super.setup()
 
-        view.backgroundColor = .white
+        view.backgroundColor = WTColor.background_g1()
 
         setupContentView()
         setupTitleSwitchView()
